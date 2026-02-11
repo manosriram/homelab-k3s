@@ -4,6 +4,11 @@ metadata:
   name: plex
 spec:
   replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1  # Allow one pod to go down first
+      maxSurge: 0        # Don't try to create extra pods before others die
   selector:
     matchLabels:
       app: plex
@@ -20,13 +25,25 @@ spec:
               protocol: TCP
           env:
             - name: PUID
-              value: "1000"
+              valueFrom:
+                configMapKeyRef:
+                  name: plex-config
+                  key: PUID
             - name: PGID
-              value: "1000"
+              valueFrom:
+                configMapKeyRef:
+                  name: plex-config
+                  key: PGID
             - name: TZ
-              value: "Asia/Kolkata"
+              valueFrom:
+                secretKeyRef:
+                  name: plex-secret
+                  key: TZ
             - name: PLEX_CLAIM
-              value: "claim-3xEg9AzG1CXz4FaU3xqk"
+              valueFrom:
+                secretKeyRef:
+                  name: plex-secret
+                  key: PLEX_CLAIM
           volumeMounts:
             - name: config
               mountPath: /config
