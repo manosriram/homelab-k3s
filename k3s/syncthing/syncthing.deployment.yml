@@ -51,5 +51,6 @@ spec:
             type: DirectoryOrCreate
         - name: data
           hostPath:
-            path: /fs/lab/data/syncthing
+            path: /fs/backups
+            # path: /fs/lab/data/syncthing
             type: DirectoryOrCreate
