@@ -20,6 +20,7 @@ spec:
       containers:
         - name: immich-machine-learning
           image: ghcr.io/immich-app/immich-machine-learning:v2.3.1
+          imagePullPolicy: IfNotPresent
           env:
             - name: TZ
               valueFrom:
@@ -33,6 +34,9 @@ spec:
               mountPath: /cache
           resources:
             requests:
+              cpu: 100m
+              memory: 250Mi
+            limits:
               cpu: 500m
               memory: 2Gi
       volumes:

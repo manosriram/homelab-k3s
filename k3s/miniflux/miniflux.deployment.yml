@@ -20,6 +20,7 @@ spec:
       containers:
         - name: postgres
           image: postgres:17
+          imagePullPolicy: IfNotPresent
           env:
             - name: POSTGRES_PASSWORD
               valueFrom:
@@ -88,6 +89,7 @@ spec:
       containers:
         - name: miniflux
           image: miniflux/miniflux:latest@sha256:02e50d5b277857e3600c14ec1a6a064a82320077914d8eb546691a5f4c1d406c
+          imagePullPolicy: IfNotPresent
           env:
             - name: DATABASE_URL
               valueFrom:

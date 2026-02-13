@@ -24,6 +24,7 @@ spec:
       containers:
         - name: copyparty
           image: copyparty/ac:latest@sha256:e6ff5501752dc714473dcfe2da4eddb8d1fbf38b74573e59a0c812758272a9e5
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3923
           env:
@@ -62,6 +63,9 @@ spec:
             failureThreshold: 3
           resources:
             requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
               cpu: 100m
               memory: 256Mi
       volumes:

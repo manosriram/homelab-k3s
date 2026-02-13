@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: qbittorrent
 spec:
-  replicas: 1
+  replicas: 2
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -20,6 +20,7 @@ spec:
       containers:
         - name: qbittorrent
           image: lscr.io/linuxserver/qbittorrent:latest
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
             - containerPort: 6889
@@ -45,13 +46,15 @@ spec:
             - name: tv
               mountPath: /tv
           livenessProbe:
-            httpGet:
-              path: /
+            tcpSocket:
               port: 8080
-            initialDelaySeconds: 45
+            initialDelaySeconds: 60
             periodSeconds: 30
           resources:
             requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
               cpu: 250m
               memory: 512Mi
       volumes:

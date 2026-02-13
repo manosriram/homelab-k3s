@@ -24,7 +24,7 @@ spec:
       containers:
       - name: kakeibo
         image: ghcr.io/manosriram/kakeibo:latest
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
         envFrom:
@@ -40,51 +40,5 @@ spec:
         hostPath:
           path: /fs/lab/data/kakeibo/data
       - name: qdrant
-        hostPath:
-          path: /fs/lab/data/kakeibo/qdrant
-
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: qdrant
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: qdrant
-  template:
-    metadata:
-      labels:
-        app: qdrant
-    spec:
-      containers:
-      - name: qdrant
-        image: qdrant/qdrant:v1.13.2
-        ports:
-        - name: http
-          containerPort: 6333
-        - name: grpc
-          containerPort: 6334
-        volumeMounts:
-        - mountPath: /qdrant/storage
-          name: qdrant-storage
-        readinessProbe:
-          httpGet:
-            path: /healthz
-            port: 6333
-          initialDelaySeconds: 30
-          periodSeconds: 10
-        livenessProbe:
-          httpGet:
-            path: /healthz
-            port: 6333
-          initialDelaySeconds: 60
-          periodSeconds: 30
-        resources:
-          limits:
-            memory: 512Mi
-      volumes:
-      - name: qdrant-storage
         hostPath:
           path: /fs/lab/data/kakeibo/qdrant

@@ -20,6 +20,7 @@ spec:
       containers:
         - name: jellyfin
           image: lscr.io/linuxserver/jellyfin:latest
+          imagePullPolicy: IfNotPresent
           env:
            - name: PUID
              value: "0"
@@ -53,6 +54,9 @@ spec:
             periodSeconds: 30
           resources:
             requests:
+              cpu: 150m
+              memory: 250Mi
+            limits:
               cpu: 1000m
               memory: 4096Mi
       volumes:

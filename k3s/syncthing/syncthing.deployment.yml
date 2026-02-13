@@ -20,6 +20,7 @@ spec:
       containers:
         - name: syncthing
           image: linuxserver/syncthing:latest
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8384
             - containerPort: 22000
@@ -47,7 +48,11 @@ spec:
             initialDelaySeconds: 45
             periodSeconds: 30
           resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
             limits:
+              cpu: 128m
               memory: 256Mi
       volumes:
         - name: config

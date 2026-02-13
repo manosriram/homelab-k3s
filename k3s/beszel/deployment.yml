@@ -21,13 +21,18 @@ spec:
       containers:
       - name: beszel
         image: henrygd/beszel
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8090
         volumeMounts:
         - mountPath: /beszel_data
           name: data
         resources:
+          requests:
+            cpu: 50m
+            memory: 256Mi
           limits:
+            cpu: 128m
             memory: 256Mi
       - name: beszel-agent
         image: henrygd/beszel-agent
@@ -55,6 +60,8 @@ spec:
         resources:
           requests:
             memory: 256Mi
+          limits:
+            memory: 500Mi
       volumes:
       - name: data
         hostPath:

@@ -20,6 +20,7 @@ spec:
       containers:
         - name: metube
           image: ghcr.io/alexta69/metube@sha256:dbbf9a25660b6255cc0726a00c06cf2968941803e29813e1d23863919794713c
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8081
           volumeMounts:
@@ -43,6 +44,9 @@ spec:
             failureThreshold: 3
           resources:
             requests:
+              cpu: 128m
+              memory: 128Mi
+            limits:
               cpu: 250m
               memory: 512Mi
       volumes:

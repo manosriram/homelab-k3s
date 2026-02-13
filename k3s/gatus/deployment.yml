@@ -20,6 +20,7 @@ spec:
       containers:
         - name: gatus
           image: twinproduction/gatus:latest
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
           envFrom:
@@ -32,8 +33,12 @@ spec:
             - name: data
               mountPath: /data
           resources:
+            requests:
+              cpu: 25m
+              memory: 64Mi
             limits:
-              memory: 256Mi
+              cpu: 50m
+              memory: 128Mi
       volumes:
         - name: config
           hostPath:

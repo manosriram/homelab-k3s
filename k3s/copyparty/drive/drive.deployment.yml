@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: copyparty-drive
 spec:
-  replicas: 1
+  replicas: 3
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -24,6 +24,7 @@ spec:
       containers:
         - name: copyparty
           image: copyparty/ac:latest@sha256:e6ff5501752dc714473dcfe2da4eddb8d1fbf38b74573e59a0c812758272a9e5
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3923
           env:
@@ -62,8 +63,11 @@ spec:
             failureThreshold: 3
           resources:
             requests:
-              cpu: 100m
-              memory: 256Mi
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 200m
+              memory: 500Mi
       volumes:
         - name: cfg
           hostPath:
