@@ -1,0 +1,32 @@
+services:
+  nginx-proxy-manager:
+      image: 'jc21/nginx-proxy-manager:latest@sha256:cd9eba29ca132cb006729f2cb2660126453f84818c2f7d75963ad7b61ef696bd'
+      container_name: nginxproxymanager
+      env_file:
+        - .env
+      volumes:
+        - ${NPM_DATA_PATH}:/data
+        - ${NPM_LETSENCRYPT_PATH}:/etc/letsencrypt
+      deploy:
+        update_config:
+          order: start-first
+      ports:
+        - '80:80'
+        - '81:81'
+        - '443:443'
+      networks:
+        - proxy-network
+      restart: always
+      healthcheck:
+        test:
+          [
+            "CMD-SHELL",
+            "if command -v curl >/dev/null 2>&1; then curl -fsS http://127.0.0.1:81/ >/dev/null 2>&1; elif command -v wget >/dev/null 2>&1; then wget --spider -q http://127.0.0.1:81/; else echo 'Neither curl nor wget found in container'; exit 1; fi"
+          ]
+        interval: 30s
+        timeout: 5s
+        retries: 10
+        start_period: 60s
+
+networks:
+  proxy-network:
