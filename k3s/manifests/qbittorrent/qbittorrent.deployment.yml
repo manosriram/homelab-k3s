@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: qbittorrent
 spec:
-  replicas: 2
+  replicas: 1
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -68,3 +68,4 @@ spec:
         - name: tv
           hostPath:
             path: /fs/media/tv
+
