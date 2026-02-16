@@ -8,6 +8,9 @@ spec:
   routes:
     - match: Host(`health.manosriram.com`)
       kind: Rule
+      middlewares:
+        - name: tinyauth-forward
+          namespace: default
       services:
         - name: gatus
           port: 9900
@@ -25,6 +28,9 @@ spec:
   routes:
     - match: Host(`infra.manosriram.com`)
       kind: Rule
+      middlewares:
+        - name: tinyauth-forward
+          namespace: default
       services:
         - name: headlamp
           port: 80
@@ -59,6 +65,9 @@ spec:
   routes:
     - match: Host(`stats.manosriram.com`)
       kind: Rule
+      middlewares:
+        - name: tinyauth-forward
+          namespace: default
       services:
         - name: beszel
           port: 8090
@@ -93,6 +102,9 @@ spec:
   routes:
     - match: Host(`ftp.manosriram.com`)
       kind: Rule
+      middlewares:
+        - name: tinyauth-forward
+          namespace: default
       services:
         - name: copyparty-ftp
           port: 3923
@@ -127,6 +139,9 @@ spec:
   routes:
     - match: Host(`watch.manosriram.com`)
       kind: Rule
+      middlewares:
+        - name: tinyauth-forward
+          namespace: default
       services:
         - name: plex
           port: 32400
@@ -161,6 +176,9 @@ spec:
   routes:
     - match: Host(`torrent.manosriram.com`)
       kind: Rule
+      middlewares:
+        - name: tinyauth-forward
+          namespace: default
       services:
         - name: qbittorrent
           port: 8080
@@ -178,6 +196,9 @@ spec:
   routes:
     - match: Host(`sync.manosriram.com`)
       kind: Rule
+      middlewares:
+        - name: tinyauth-forward
+          namespace: default
       services:
         - name: syncthing
           port: 8384
@@ -212,6 +233,9 @@ spec:
   routes:
     - match: Host(`bookmarks.manosriram.com`)
       kind: Rule
+      middlewares:
+        - name: tinyauth-forward
+          namespace: default
       services:
         - name: linkding
           port: 9902
@@ -229,6 +253,9 @@ spec:
   routes:
     - match: Host(`youtube.manosriram.com`)
       kind: Rule
+      middlewares:
+        - name: tinyauth-forward
+          namespace: default
       services:
         - name: metube
           port: 8081
@@ -246,6 +273,9 @@ spec:
   routes:
     - match: Host(`rss.manosriram.com`)
       kind: Rule
+      middlewares:
+        - name: tinyauth-forward
+          namespace: default
       services:
         - name: miniflux
           port: 8080
@@ -263,6 +293,9 @@ spec:
   routes:
     - match: Host(`cron.manosriram.com`)
       kind: Rule
+      middlewares:
+        - name: tinyauth-forward
+          namespace: default
       services:
         - name: cronicle
           port: 3012
