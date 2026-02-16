@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: traefik
+spec:
+  selector:
+    matchLabels:
+      app: traefik
+  template:
+    metadata:
+      labels:
+        app: traefik
+    spec:
+      serviceAccountName: traefik
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      containers:
+        - name: traefik
+          image: traefik:v3.1
+          args:
+            - --api.insecure=true
+            - --providers.kubernetesCRD
+            - --providers.kubernetesCRD.allowCrossNamespace=true
+            - --entrypoints.web.address=:80
+            - --entrypoints.web.http.redirections.entryPoint.to=websecure
+            - --entrypoints.web.http.redirections.entryPoint.scheme=https
+            - --entrypoints.web.http.redirections.entryPoint.permanent=true
+            - --entrypoints.websecure.address=:443
+            - --serversTransport.insecureSkipVerify=true
+            - --certificatesresolvers.default.acme.tlschallenge=false
+            - --certificatesresolvers.default.acme.dnschallenge.provider=cloudflare
+            - --certificatesresolvers.default.acme.dnschallenge.delaybeforecheck=0
+            - --certificatesresolvers.default.acme.email=admin@manosriram.com
+            - --certificatesresolvers.default.acme.storage=/letsencrypt/acme.json
+          ports:
+            - name: web
+              containerPort: 80
+              hostPort: 80
+            - name: websecure
+              containerPort: 443
+              hostPort: 443
+            - name: admin
+              containerPort: 8080
+          env:
+            - name: CF_DNS_API_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: cloudflare-api-token
+                  key: CF_DNS_API_TOKEN
+          volumeMounts:
+            - name: letsencrypt
+              mountPath: /letsencrypt
+      volumes:
+        - name: letsencrypt
+          hostPath:
+            path: /opt/traefik/letsencrypt
+            type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: traefik
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: traefik
+rules:
+  - apiGroups: [""]
+    resources: ["services","endpoints","secrets","nodes","namespaces"]
+    verbs: ["get","list","watch"]
+  - apiGroups: ["discovery.k8s.io"]
+    resources: ["endpointslices"]
+    verbs: ["get","list","watch"]
+  - apiGroups: ["traefik.io"]
+    resources: ["ingressroutes","middlewares","middlewaretcps","ingressroutetcps","tlsoptions","tlsstores","serverstransports","ingressrouteudps","traefikservices","serverstransporttcps"]
+    verbs: ["get","list","watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: traefik
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: traefik
+subjects:
+  - kind: ServiceAccount
+    name: traefik
+    namespace: default

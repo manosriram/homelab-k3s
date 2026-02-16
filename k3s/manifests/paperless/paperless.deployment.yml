@@ -42,6 +42,16 @@ spec:
                 secretKeyRef:
                   name: paperless-secrets
                   key: PAPERLESS_ADMIN_PASSWORD
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: paperless-secrets
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: paperless-secrets
+                  key: POSTGRES_PASSWORD
           volumeMounts:
             - name: data
               mountPath: /usr/src/paperless/data

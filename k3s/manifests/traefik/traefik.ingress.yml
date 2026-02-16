@@ -1,0 +1,271 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: health.manosriram.com
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`health.manosriram.com`)
+      kind: Rule
+      services:
+        - name: gatus
+          port: 9900
+          namespace: default
+  tls:
+    certResolver: default
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: infra.manosriram.com
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`infra.manosriram.com`)
+      kind: Rule
+      services:
+        - name: headlamp
+          port: 80
+          namespace: headlamp-system
+  tls:
+    certResolver: default
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: auth.manosriram.com
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`auth.manosriram.com`)
+      kind: Rule
+      services:
+        - name: tinyauth
+          port: 80
+          namespace: default
+  tls:
+    certResolver: default
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: stats.manosriram.com
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`stats.manosriram.com`)
+      kind: Rule
+      services:
+        - name: beszel
+          port: 8090
+          namespace: default
+  tls:
+    certResolver: default
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: drive.manosriram.com
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`drive.manosriram.com`)
+      kind: Rule
+      services:
+        - name: paperless
+          port: 8000
+          namespace: paperless
+  tls:
+    certResolver: default
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: ftp.manosriram.com
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`ftp.manosriram.com`)
+      kind: Rule
+      services:
+        - name: copyparty-ftp
+          port: 3923
+          namespace: default
+  tls:
+    certResolver: default
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: photos.manosriram.com
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`photos.manosriram.com`)
+      kind: Rule
+      services:
+        - name: immich-server
+          port: 2283
+          namespace: default
+  tls:
+    certResolver: default
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: watch.manosriram.com
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`watch.manosriram.com`)
+      kind: Rule
+      services:
+        - name: plex
+          port: 32400
+          namespace: default
+  tls:
+    certResolver: default
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: id.manosriram.com
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`id.manosriram.com`)
+      kind: Rule
+      services:
+        - name: pocketid-service
+          port: 80
+          namespace: default
+  tls:
+    certResolver: default
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: torrent.manosriram.com
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`torrent.manosriram.com`)
+      kind: Rule
+      services:
+        - name: qbittorrent
+          port: 8080
+          namespace: default
+  tls:
+    certResolver: default
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: sync.manosriram.com
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`sync.manosriram.com`)
+      kind: Rule
+      services:
+        - name: syncthing
+          port: 8384
+          namespace: default
+  tls:
+    certResolver: default
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: passwords.manosriram.com
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`passwords.manosriram.com`)
+      kind: Rule
+      services:
+        - name: vaultwarden
+          port: 80
+          namespace: default
+  tls:
+    certResolver: default
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: bookmarks.manosriram.com
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`bookmarks.manosriram.com`)
+      kind: Rule
+      services:
+        - name: linkding
+          port: 9902
+          namespace: default
+  tls:
+    certResolver: default
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: youtube.manosriram.com
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`youtube.manosriram.com`)
+      kind: Rule
+      services:
+        - name: metube
+          port: 8081
+          namespace: default
+  tls:
+    certResolver: default
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: rss.manosriram.com
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`rss.manosriram.com`)
+      kind: Rule
+      services:
+        - name: miniflux
+          port: 8080
+          namespace: default
+  tls:
+    certResolver: default
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: cron.manosriram.com
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`cron.manosriram.com`)
+      kind: Rule
+      services:
+        - name: cronicle
+          port: 3012
+          namespace: default
+  tls:
+    certResolver: default

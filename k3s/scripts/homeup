@@ -9,7 +9,7 @@ from typing import List
 
 # --- Configuration ---
 # Use Path for robust path handling and default to a standard root
-SERVICE_ROOT_DIR = Path(os.environ.get("SERVICE_ROOT_DIR", "/fs/containers/docker-compose/"))
+SERVICE_ROOT_DIR = Path(os.environ.get("SERVICE_ROOT_DIR", "/fs/lab/compose/"))
 
 # Process disabled paths: Convert environment list to a set of Path objects for fast and robust checking
 # All paths in DISABLED_SERVICE_PATHS are absolute and normalized.

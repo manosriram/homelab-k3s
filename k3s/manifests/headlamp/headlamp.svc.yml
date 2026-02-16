@@ -8,7 +8,7 @@ spec:
   ports:
     - port: 80
       targetPort: 4466
-      nodePort: 30005  # Fixed port for easy access; remove if dynamic is preferred
+      # nodePort: 30005
   selector:
     app: headlamp
 

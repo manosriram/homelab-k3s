@@ -1,0 +1,70 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: pocketid-secret
+type: Opaque
+stringData:
+  # Replace with the output from the openssl command above
+  ENCRYPTION_KEY: "SSH2X3yk1wQDCpE6jAzO6mAyeMHeItxnuGgVI/5BNnU="
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pocketid-data
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pocketid
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pocketid
+  template:
+    metadata:
+      labels:
+        app: pocketid
+    spec:
+      containers:
+      - name: pocketid
+        image: ghcr.io/pocket-id/pocket-id:latest
+        ports:
+        - containerPort: 1411
+        env:
+        - name: APP_URL
+          value: "https://id.manosriram.com"
+        - name: TRUST_PROXY
+          value: "true"
+        - name: ENCRYPTION_KEY
+          valueFrom:
+            secretKeyRef:
+              name: pocketid-secret
+              key: ENCRYPTION_KEY
+        volumeMounts:
+        - name: data
+          mountPath: /app/data
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: pocketid-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pocketid-service
+spec:
+  type: NodePort
+  selector:
+    app: pocketid
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 1411
+      nodePort: 30205

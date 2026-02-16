@@ -1,0 +1,95 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tinyauth
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tinyauth
+  template:
+    metadata:
+      labels:
+        app: tinyauth
+    spec:
+      containers:
+      - name: tinyauth
+        image: ghcr.io/steveiliop56/tinyauth:latest
+        ports:
+        - containerPort: 3000
+        env:
+        - name: APP_URL
+          valueFrom:
+            secretKeyRef:
+              name: tinyauth-secrets
+              key: APP_URL
+        - name: SECRET
+          valueFrom:
+            secretKeyRef:
+              name: tinyauth-secrets
+              key: SECRET
+        # - name: USERS
+          # valueFrom:
+            # secretKeyRef:
+              # name: tinyauth-secrets
+              # key: USERS
+        - name: BACKGROUND_IMAGE
+          valueFrom:
+            secretKeyRef:
+              name: tinyauth-secrets
+              key: BACKGROUND_IMAGE
+        - name: PROVIDERS_POCKETID_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: tinyauth-secrets
+              key: PROVIDERS_POCKETID_CLIENT_ID
+        - name: PROVIDERS_POCKETID_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: tinyauth-secrets
+              key: PROVIDERS_POCKETID_CLIENT_SECRET
+        - name: PROVIDERS_POCKETID_AUTH_URL
+          valueFrom:
+            secretKeyRef:
+              name: tinyauth-secrets
+              key: PROVIDERS_POCKETID_AUTH_URL
+        - name: PROVIDERS_POCKETID_TOKEN_URL
+          valueFrom:
+            secretKeyRef:
+              name: tinyauth-secrets
+              key: PROVIDERS_POCKETID_TOKEN_URL
+        - name: PROVIDERS_POCKETID_USER_INFO_URL
+          valueFrom:
+            secretKeyRef:
+              name: tinyauth-secrets
+              key: PROVIDERS_POCKETID_USER_INFO_URL
+        - name: PROVIDERS_POCKETID_REDIRECT_URL
+          valueFrom:
+            secretKeyRef:
+              name: tinyauth-secrets
+              key: PROVIDERS_POCKETID_REDIRECT_URL
+        - name: PROVIDERS_POCKETID_SCOPES
+          valueFrom:
+            secretKeyRef:
+              name: tinyauth-secrets
+              key: PROVIDERS_POCKETID_SCOPES
+        - name: PROVIDERS_POCKETID_NAME
+          valueFrom:
+            secretKeyRef:
+              name: tinyauth-secrets
+              key: PROVIDERS_POCKETID_NAME
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tinyauth
+spec:
+  type: NodePort
+  selector:
+    app: tinyauth
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
+      nodePort: 30202
