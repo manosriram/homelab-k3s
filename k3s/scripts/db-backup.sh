@@ -4,6 +4,8 @@
 
 set -uo pipefail
 
+source /fs/lab/k3s/scripts/envinit.sh;
+
 # --- Configuration ---
 NAMESPACE="default"
 BACKUP_TYPE="${1:-daily}"
@@ -11,8 +13,6 @@ BACKUP_BASE_DIR="/fs/backups/cold/containerdb"
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 
 # Webhook URLs for notifications
-HEALTHCHECK_DAILY="https://hc-ping.com/d7d85e6e-1bfc-47de-abb9-e779de6155c0"
-HEALTHCHECK_MONTHLY="https://hc-ping.com/a6a7e144-043d-45cd-9766-e8116233e9f5"
 
 # PostgreSQL configurations (app_name -> pod_label:db_name:user:service_name)
 declare -A PG_CONFIGS
@@ -24,7 +24,6 @@ SQLITE_CONFIGS[vaultwarden]="/fs/lab/data/vaultwarden:Vaultwarden data"
 SQLITE_CONFIGS[linkding]="/fs/lab/data/linkding:Linkding data"
 SQLITE_CONFIGS[beszel]="/fs/lab/data/beszel:Beszel data"
 SQLITE_CONFIGS[gatus]="/fs/lab/data/gatus:Gatus data"
-SQLITE_CONFIGS[npm]="/fs/lab/compose/npm/data:NPM Data"
 
 # Get pod name by label
 get_pod_by_label() {
@@ -254,10 +253,10 @@ log "  Failed: ${#FAILED[@]} - ${FAILED[*]}"
 if [[ ${#FAILED[@]} -eq 0 ]]; then
     case "$BACKUP_TYPE" in
         daily)
-            hit_webhook "$HEALTHCHECK_DAILY" "daily"
+            hit_webhook "$DAILY_DB_BACKUP_HEALTHCHECK_URL" "daily"
             ;;
         monthly)
-            hit_webhook "$HEALTHCHECK_MONTHLY" "monthly"
+            hit_webhook "$MONTHLY_DB_BACKUP_HEALTHCHECK_URL" "monthly"
             ;;
     esac
 fi

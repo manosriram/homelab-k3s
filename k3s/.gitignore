@@ -10,3 +10,6 @@ immich/secret.yml
 **/.env
 **/.env.local
 **/.env.*.local
+
+minio-credentials
+**/envinit.sh
