@@ -1,22 +1,3 @@
-apiVersion: v1
-kind: Secret
-metadata:
-  name: pocketid-secret
-type: Opaque
-stringData:
-  ENCRYPTION_KEY: "SSH2X3yk1wQDCpE6jAzO6mAyeMHeItxnuGgVI/5BNnU="
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: pocketid-data
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -53,17 +34,3 @@ spec:
       - name: data
         persistentVolumeClaim:
           claimName: pocketid-data
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: pocketid-service
-spec:
-  type: NodePort
-  selector:
-    app: pocketid
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 1411
-      nodePort: 30205
