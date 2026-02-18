@@ -38,7 +38,14 @@ flowchart TB
             Gatus["health.manosriram.com\n(Uptime)"]
             Beszel["stats.manosriram.com\n(Metrics)"]
             Cronicle["cron.manosriram.com\n(Scheduler)"]
+            Velero["Velero\n(Backup)"]
         end
+        
+        subgraph Storage["Storage"]
+            MinIO["MinIO\n(Backup Storage)"]
+        end
+        
+        Velero --> MinIO
         
         subgraph Auth["Identity"]
             Tinyauth["auth.manosriram.com\n(Login Portal)"]
@@ -71,6 +78,7 @@ k3s-deploy -d <dir> -n <namespace> deploy|delete
 
 ## Backups
 
+- **Velero** for cluster backups (including MinIO) stored in MinIO
 - **Daily** at 8:00 AM → Backblaze B2 (30 day retention)
 - **Monthly** at 9:00 AM → Backblaze B2 (12 month retention)
 - Health checks via healthchecks.io every 10 minutes
