@@ -4,7 +4,6 @@ metadata:
   name: pocketid-secret
 type: Opaque
 stringData:
-  # Replace with the output from the openssl command above
   ENCRYPTION_KEY: "SSH2X3yk1wQDCpE6jAzO6mAyeMHeItxnuGgVI/5BNnU="
 ---
 apiVersion: v1

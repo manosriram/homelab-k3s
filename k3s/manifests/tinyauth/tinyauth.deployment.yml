@@ -28,11 +28,11 @@ spec:
             secretKeyRef:
               name: tinyauth-secrets
               key: SECRET
-        # - name: USERS
-          # valueFrom:
-            # secretKeyRef:
-              # name: tinyauth-secrets
-              # key: USERS
+        - name: USERS
+          valueFrom:
+            secretKeyRef:
+              name: tinyauth-secrets
+              key: USERS
         - name: BACKGROUND_IMAGE
           valueFrom:
             secretKeyRef:
@@ -85,11 +85,11 @@ kind: Service
 metadata:
   name: tinyauth
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: tinyauth
   ports:
     - protocol: TCP
       port: 80
       targetPort: 3000
-      nodePort: 30202
+      # nodePort: 30202
