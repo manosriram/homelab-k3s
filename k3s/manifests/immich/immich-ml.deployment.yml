@@ -34,10 +34,10 @@ spec:
               mountPath: /cache
           resources:
             requests:
-              cpu: 100m
+              cpu: 500m
               memory: 250Mi
             limits:
-              cpu: 500m
+              cpu: 2000m
               memory: 2Gi
       volumes:
         - name: ml-cache
