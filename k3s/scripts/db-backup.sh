@@ -15,8 +15,8 @@ TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 # Webhook URLs for notifications
 
 # PostgreSQL configurations (app_name -> pod_label:db_name:user:service_name)
-declare -A PG_CONFIGS
-PG_CONFIGS[miniflux]="miniflux-db:minifluxrss:manosriram:miniflux"
+# declare -A PG_CONFIGS
+# PG_CONFIGS[miniflux]="miniflux-db:minifluxrss:manosriram:miniflux"
 
 # SQLite configurations (app_name -> host_path:description)
 declare -A SQLITE_CONFIGS
