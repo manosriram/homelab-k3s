@@ -9,10 +9,10 @@ spec:
   ports:
     - name: web
       port: 80
-      targetPort: 80
+      targetPort: 8982
     - name: websecure
       port: 443
-      targetPort: 443
+      targetPort: 8988
     - name: admin
       port: 8080
       targetPort: 8080

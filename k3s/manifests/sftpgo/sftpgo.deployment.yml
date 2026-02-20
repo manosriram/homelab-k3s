@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sftpgo
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 0
+  selector:
+    matchLabels:
+      app: sftpgo
+  template:
+    metadata:
+      labels:
+        app: sftpgo
+    spec:
+      containers:
+        - name: sftpgo
+          image: drakkan/sftpgo:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+            - containerPort: 2022
+              protocol: TCP
+          env:
+            - name: SFTPGO_DATA_DIR
+              value: /srv/sftpgo/data
+            - name: SFTPGO_CONFIG_DIR
+              value: /srv/sftpgo/config
+            - name: SFTPGO_LOG_LEVEL
+              value: "info"
+            - name: SFTPGO_LOG_MAX_SIZE
+              value: "50"
+            - name: SFTPGO_LOG_MAX_BACKUPS
+              value: "5"
+            - name: SFTPGO_LOG_COMPRESS
+              value: "true"
+            - name: SFTPGO_LOG_LOCAL_TIME
+              value: "true"
+            - name: SFTPGO_CREDENTIALS_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: sftpgo-secrets
+                  key: credentials-secret
+          volumeMounts:
+            - name: backups
+              mountPath: /backups
+            - name: media
+              mountPath: /media
+            - name: lab
+              mountPath: /lab
+            - name: config
+              mountPath: /srv/sftpgo/config
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 30
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 256m
+              memory: 256Mi
+      volumes:
+        - name: backups
+          hostPath:
+            path: /fs/backups
+            type: DirectoryOrCreate
+        - name: media
+          hostPath:
+            path: /fs/media
+            type: DirectoryOrCreate
+        - name: lab
+          hostPath:
+            path: /fs/lab
+            type: DirectoryOrCreate
+        - name: config
+          persistentVolumeClaim:
+            claimName: sftpgo-config
