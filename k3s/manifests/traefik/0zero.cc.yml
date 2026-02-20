@@ -1,0 +1,44 @@
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: add-s-prefix
+  namespace: default
+spec:
+  redirectRegex:
+    regex: "^https?://0zero\\.cc/([^s].*)$"
+    replacement: "https://0zero.cc/s/$1"
+    permanent: false
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: redirect-to-slash-app
+  namespace: default
+spec:
+  redirectRegex:
+    regex: "^https?://0zero\\.cc/s/(.+)$"
+    replacement: "https://z.manosriram.com/s/$1"
+    permanent: false
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: zero-cc-ingress
+  namespace: default
+spec:
+  entryPoints:
+    - web
+    - websecure
+  routes:
+    - match: Host(`0zero.cc`) || Host(`www.0zero.cc`)
+      kind: Rule
+      middlewares:
+        - name: add-s-prefix
+          namespace: default
+        - name: redirect-to-slash-app
+          namespace: default
+      services:
+        - name: slash
+          port: 5231
+  tls:
+    certResolver: default

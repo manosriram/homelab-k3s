@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: slash
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 0
+  selector:
+    matchLabels:
+      app: slash
+  template:
+    metadata:
+      labels:
+        app: slash
+    spec:
+      containers:
+      - name: slash
+        image: yourselfhosted/slash:latest
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: SLASH_PORT
+          value: "5231"
+        volumeMounts:
+        - mountPath: /var/opt/slash
+          name: data
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 500m
+            memory: 256Mi
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: slash-data
