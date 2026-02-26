@@ -56,7 +56,7 @@ flowchart TB
 
 ## Access
 
-All services are accessible via **Tailscale VPN** at `100.69.69.69`. Services with Tinyauth protection require login through `auth.manosriram.com` first.
+Network is within Tailscale. Services are gatewayed through [tinyauth](https://github.com/steveiliop56/tinyauth)
 
 ## Deployment
 
