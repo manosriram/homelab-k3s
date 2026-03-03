@@ -18,66 +18,66 @@ spec:
         ports:
         - containerPort: 3000
         env:
-        - name: APP_URL
+        - name: TINYAUTH_APPURL
           valueFrom:
             secretKeyRef:
               name: tinyauth-secrets
-              key: APP_URL
-        - name: SECRET
+              key: TINYAUTH_APPURL
+        - name: TINYAUTH_SECRET
           valueFrom:
             secretKeyRef:
               name: tinyauth-secrets
-              key: SECRET
-        - name: USERS
+              key: TINYAUTH_SECRET
+        - name: TINYAUTH_AUTH_USERS
           valueFrom:
             secretKeyRef:
               name: tinyauth-secrets
-              key: USERS
-        - name: BACKGROUND_IMAGE
+              key: TINYAUTH_AUTH_USERS
+        - name: TINYAUTH_UI_BACKGROUNDIMAGE
           valueFrom:
             secretKeyRef:
               name: tinyauth-secrets
-              key: BACKGROUND_IMAGE
-        - name: PROVIDERS_POCKETID_CLIENT_ID
+              key: TINYAUTH_UI_BACKGROUNDIMAGE
+        - name: TINYAUTH_OAUTH_PROVIDERS_POCKETID_CLIENTID
           valueFrom:
             secretKeyRef:
               name: tinyauth-secrets
-              key: PROVIDERS_POCKETID_CLIENT_ID
-        - name: PROVIDERS_POCKETID_CLIENT_SECRET
+              key: TINYAUTH_OAUTH_PROVIDERS_POCKETID_CLIENTID
+        - name: TINYAUTH_OAUTH_PROVIDERS_POCKETID_CLIENTSECRET
           valueFrom:
             secretKeyRef:
               name: tinyauth-secrets
-              key: PROVIDERS_POCKETID_CLIENT_SECRET
-        - name: PROVIDERS_POCKETID_AUTH_URL
+              key: TINYAUTH_OAUTH_PROVIDERS_POCKETID_CLIENTSECRET
+        - name: TINYAUTH_OAUTH_PROVIDERS_POCKETID_AUTHURL
           valueFrom:
             secretKeyRef:
               name: tinyauth-secrets
-              key: PROVIDERS_POCKETID_AUTH_URL
-        - name: PROVIDERS_POCKETID_TOKEN_URL
+              key: TINYAUTH_OAUTH_PROVIDERS_POCKETID_AUTHURL
+        - name: TINYAUTH_OAUTH_PROVIDERS_POCKETID_TOKENURL
           valueFrom:
             secretKeyRef:
               name: tinyauth-secrets
-              key: PROVIDERS_POCKETID_TOKEN_URL
-        - name: PROVIDERS_POCKETID_USER_INFO_URL
+              key: TINYAUTH_OAUTH_PROVIDERS_POCKETID_TOKENURL
+        - name: TINYAUTH_OAUTH_PROVIDERS_POCKETID_USERINFOURL
           valueFrom:
             secretKeyRef:
               name: tinyauth-secrets
-              key: PROVIDERS_POCKETID_USER_INFO_URL
-        - name: PROVIDERS_POCKETID_REDIRECT_URL
+              key: TINYAUTH_OAUTH_PROVIDERS_POCKETID_USERINFOURL
+        - name: TINYAUTH_OAUTH_PROVIDERS_POCKETID_REDIRECTURL
           valueFrom:
             secretKeyRef:
               name: tinyauth-secrets
-              key: PROVIDERS_POCKETID_REDIRECT_URL
-        - name: PROVIDERS_POCKETID_SCOPES
+              key: TINYAUTH_OAUTH_PROVIDERS_POCKETID_REDIRECTURL
+        - name: TINYAUTH_OAUTH_PROVIDERS_POCKETID_SCOPES
           valueFrom:
             secretKeyRef:
               name: tinyauth-secrets
-              key: PROVIDERS_POCKETID_SCOPES
-        - name: PROVIDERS_POCKETID_NAME
+              key: TINYAUTH_OAUTH_PROVIDERS_POCKETID_SCOPES
+        - name: TINYAUTH_OAUTH_PROVIDERS_POCKETID_NAME
           valueFrom:
             secretKeyRef:
               name: tinyauth-secrets
-              key: PROVIDERS_POCKETID_NAME
+              key: TINYAUTH_OAUTH_PROVIDERS_POCKETID_NAME
 
 ---
 apiVersion: v1
