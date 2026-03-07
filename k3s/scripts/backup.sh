@@ -9,7 +9,7 @@ source /fs/lab/k3s/scripts/envinit.sh;
 TAG="$1" # Assign the provided tag
 
 # Paths to backup
-BACKUP_PATHS="/fs/backups /fs/lab/ /fs/k3s/storage/"
+BACKUP_PATHS="/fs/backups /fs/lab/ /fs/k3s/storage/ /fs2/archives"
 
 restic unlock;
 
@@ -23,15 +23,15 @@ elif [ "$TAG" == "monthly" ]; then
     TTL="8760h0m0s"  # 1 Year (365 days)
 fi
 
-echo "Starting Velero backup: ${BACKUP_NAME} with TTL ${TTL}"
+# echo "Starting Velero backup: ${BACKUP_NAME} with TTL ${TTL}"
 
-velero backup create "${BACKUP_NAME}" \
-    --default-volumes-to-fs-backup \
-    --ttl "$TTL" \
-    --labels schedule="$TAG" \
-    --wait
+# velero backup create "${BACKUP_NAME}" \
+    # --default-volumes-to-fs-backup \
+    # --ttl "$TTL" \
+    # --labels schedule="$TAG" \
+    # --wait
 
-echo "Finished Velero backup: ${BACKUP_NAME}"
+# echo "Finished Velero backup: ${BACKUP_NAME}"
 
 restic backup --tag "$TAG" $BACKUP_PATHS \
     && echo "Backup with tag '$TAG' completed." \

@@ -52,6 +52,8 @@ spec:
               mountPath: /media
             - name: lab
               mountPath: /lab
+            - name: fs2
+              mountPath: /fs2
             - name: config
               mountPath: /srv/sftpgo/config
           livenessProbe:
@@ -79,6 +81,10 @@ spec:
         - name: lab
           hostPath:
             path: /fs/lab
+            type: DirectoryOrCreate
+        - name: fs2
+          hostPath:
+            path: /fs2
             type: DirectoryOrCreate
         - name: config
           persistentVolumeClaim:

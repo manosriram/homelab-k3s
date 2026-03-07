@@ -257,8 +257,8 @@ spec:
         - name: tinyauth-forward
           namespace: default
       services:
-        - name: metube
-          port: 8081
+        - name: pinchflat
+          port: 8945
           namespace: default
   tls:
     certResolver: default
@@ -277,8 +277,8 @@ spec:
         - name: tinyauth-forward
           namespace: default
       services:
-        - name: miniflux
-          port: 8080
+        - name: yarr-external-svc # Pointing to our manual service
+          port: 7070              # Matching the service port above
           namespace: default
   tls:
     certResolver: default

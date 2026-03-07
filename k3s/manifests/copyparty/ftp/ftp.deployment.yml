@@ -39,6 +39,8 @@ spec:
               mountPath: /a
             - name: youtube
               mountPath: /youtube
+            - name: fs2
+              mountPath: /fs2
             - name: data-b
               mountPath: /b
           livenessProbe:
@@ -80,6 +82,10 @@ spec:
         - name: youtube
           hostPath:
             path: /fs/backups/warm/metube
+            type: Directory
+        - name: fs2
+          hostPath:
+            path: /fs2
             type: Directory
         - name: data-b
           hostPath:

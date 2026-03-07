@@ -1,0 +1,71 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pinchflat-config
+data:
+  TZ: "UTC"
+  LOG_LEVEL: "debug"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pinchflat
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: pinchflat
+  template:
+    metadata:
+      labels:
+        app: pinchflat
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: manosriram
+      containers:
+        - name: pinchflat
+          image: keglin/pinchflat:latest
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8945
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: pinchflat-config
+          volumeMounts:
+            - mountPath: /config
+              name: pinchflat-config
+            - mountPath: /downloads
+              name: pinchflat-downloads
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 1000m
+              memory: 1Gi
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8945
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8945
+            initialDelaySeconds: 30
+            periodSeconds: 10
+      volumes:
+        - name: pinchflat-config
+          hostPath:
+            path: /fs/lab/data/pinchflat/config
+            type: DirectoryOrCreate
+        - name: pinchflat-downloads
+          hostPath:
+            path: /fs2/archive/youtube
+            type: DirectoryOrCreate
+---
