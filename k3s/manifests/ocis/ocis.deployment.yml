@@ -1,0 +1,82 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ocis
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ocis
+  namespace: ocis
+spec:
+  selector:
+    app: ocis
+  ports:
+  - name: http
+    port: 9200
+    targetPort: 9200
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ocis
+  namespace: ocis
+spec:
+  selector:
+    matchLabels:
+      app: ocis
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: ocis
+    spec:
+      initContainers:
+      - name: ocis-init
+        image: owncloud/ocis:latest
+        command: ["/bin/sh", "-c"]
+        args:
+        - |
+          if [ ! -f /etc/ocis/ocis.yaml ]; then
+            ocis init --insecure yes
+          fi
+        env:
+        - name: OCIS_INSECURE
+          value: "true"
+        volumeMounts:
+        - name: ocis-config
+          mountPath: /etc/ocis
+        - name: ocis-data
+          mountPath: /var/lib/ocis
+      containers:
+      - name: ocis
+        image: owncloud/ocis:latest
+        args:
+        - server
+        env:
+        # - name: OCIS_INSECURE
+          # value: "true"
+        - name: PROXY_HTTP_ADDR
+          value: "0.0.0.0:9200"
+        - name: PROXY_TLS
+          value: "false"
+        - name: OCIS_URL
+          value: "https://drive.manosriram.com"
+        ports:
+        - containerPort: 9200
+          name: http
+        volumeMounts:
+        - name: ocis-config
+          mountPath: /etc/ocis
+        - name: ocis-data
+          mountPath: /var/lib/ocis
+      volumes:
+      - name: ocis-config
+        hostPath:
+          path: /fs/lab/data/ocis/config
+          type: DirectoryOrCreate
+      - name: ocis-data
+        hostPath:
+          path: /fs/lab/data/ocis
+          type: DirectoryOrCreate

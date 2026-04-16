@@ -17,6 +17,8 @@ spec:
       labels:
         app: qbittorrent
     spec:
+      nodeSelector:
+        kubernetes.io/hostname: manosriram
       containers:
         - name: qbittorrent
           image: lscr.io/linuxserver/qbittorrent:latest

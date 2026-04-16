@@ -86,9 +86,9 @@ spec:
     - match: Host(`drive.manosriram.com`)
       kind: Rule
       services:
-        - name: paperless
-          port: 8000
-          namespace: paperless
+        - name: ocis
+          port: 9200
+          namespace: ocis
   tls:
     certResolver: default
 ---
@@ -150,21 +150,21 @@ spec:
     certResolver: default
 ---
 apiVersion: traefik.io/v1alpha1
-kind: IngressRoute
+kind: IngressRouteTCP
 metadata:
-  name: id.manosriram.com
+  name: fs.manosriram.com
 spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`id.manosriram.com`)
-      kind: Rule
+    - match: HostSNI(`fs.manosriram.com`)
       services:
-        - name: pocketid-service
-          port: 80
+        - name: ocis-service
           namespace: default
+          port: 9200
   tls:
     certResolver: default
+    passthrough: true
 ---
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
@@ -327,18 +327,17 @@ apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
   name: fs.manosriram.com
+  annotations:
+    traefik.ingress.kubernetes.io/router.middlewares: default-https-forward@kubernetescrd
 spec:
   entryPoints:
     - websecure
   routes:
     - match: Host(`fs.manosriram.com`)
       kind: Rule
-      middlewares:
-        - name: tinyauth-forward
-          namespace: default
       services:
-        - name: sftpgo
-          port: 8080
+        - name: ocis-service
+          port: 9200
           namespace: default
   tls:
     certResolver: default
@@ -376,6 +375,26 @@ spec:
       services:
         - name: slash
           port: 5231
+          namespace: default
+  tls:
+    certResolver: default
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: backups.manosriram.com
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`backups.manosriram.com`)
+      kind: Rule
+      middlewares:
+        - name: tinyauth-forward
+          namespace: default
+      services:
+        - name: backrest
+          port: 9898
           namespace: default
   tls:
     certResolver: default

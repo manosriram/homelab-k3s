@@ -66,6 +66,6 @@ spec:
             type: DirectoryOrCreate
         - name: pinchflat-downloads
           hostPath:
-            path: /fs2/archive/youtube
+            path: /fs2/archives/youtube
             type: DirectoryOrCreate
 ---
