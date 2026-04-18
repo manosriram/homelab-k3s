@@ -2,5 +2,18 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended"
+  ],
+  "kubernetes": {
+    "fileMatch": ["^k3s/manifests/.+\\.yaml$"]
+  },
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": ["^k3s/manifests/.+\\.yaml$"],
+      "matchStrings": [
+        "image:\\s*\"?(?<depName>[^\\s\":]+):(?<currentValue>[^\\s\"@]+)(?:@(?<currentDigest>sha256:[a-f0-9]+))?\"?"
+      ],
+      "datasourceTemplate": "docker"
+    }
   ]
 }
