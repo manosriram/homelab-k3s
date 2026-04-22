@@ -1,0 +1,15 @@
+services:
+  filebrowser:
+    image: gtstef/filebrowser
+    container_name: filebrowser
+    user: "1000:1000"
+    ports:
+      - "30082:80"
+    volumes:
+      - /fs:/fs
+      - /fs2:/fs2
+      - /fs/lab/data/filebrowser:/home/filebrowser/data
+    environment:
+      - PUID=1000
+      - PGID=1000
+    restart: unless-stopped
