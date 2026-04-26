@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dufs
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 0
+  selector:
+    matchLabels:
+      app: dufs
+  template:
+    metadata:
+      labels:
+        app: dufs
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+        - name: dufs
+          image: sigoden/dufs:latest
+          imagePullPolicy: IfNotPresent
+          args:
+            - -p=3927
+            - -A
+            - --allow-symlink
+            - /data
+          ports:
+            - containerPort: 3927
+              name: http
+          volumeMounts:
+            - name: data
+              mountPath: /data
+            - name: fs
+              mountPath: /fs
+            - name: fs2
+              mountPath: /fs2
+          # livenessProbe:
+            # httpGet:
+              # path: /
+              # port: 3927
+              # scheme: HTTP
+            # initialDelaySeconds: 30
+            # periodSeconds: 10
+            # timeoutSeconds: 5
+            # successThreshold: 1
+            # failureThreshold: 3
+          # readinessProbe:
+            # httpGet:
+              # path: /
+              # port: 3927
+              # scheme: HTTP
+            # initialDelaySeconds: 10
+            # periodSeconds: 5
+            # timeoutSeconds: 3
+            # successThreshold: 1
+            # failureThreshold: 3
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 256Mi
+      volumes:
+        - name: data
+          hostPath:
+            path: /fs/lab/data/dufs
+            type: DirectoryOrCreate
+        - name: fs
+          hostPath:
+            path: /fs
+            type: DirectoryOrCreate
+        - name: fs2
+          hostPath:
+            path: /fs2
+            type: DirectoryOrCreate

@@ -55,14 +55,14 @@ spec:
         args:
         - server
         env:
-        # - name: OCIS_INSECURE
-          # value: "true"
+        - name: OCIS_INSECURE
+          value: "true"
         - name: PROXY_HTTP_ADDR
           value: "0.0.0.0:9200"
         - name: PROXY_TLS
           value: "false"
-        - name: OCIS_URL
-          value: "https://drive.manosriram.com"
+        # - name: OCIS_URL
+          # value: "https://drive.manosriram.com"
         ports:
         - containerPort: 9200
           name: http

@@ -3,6 +3,34 @@ kind: Namespace
 metadata:
   name: headlamp-system
 ---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: headlamp-admin
+  namespace: headlamp-system
+---
+apiVersion: v1
+kind: Secret
+type: kubernetes.io/service-account-token
+metadata:
+  name: headlamp-admin-token
+  namespace: headlamp-system
+  annotations:
+    kubernetes.io/service-account.name: headlamp-admin
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: headlamp-admin-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+  - kind: ServiceAccount
+    name: headlamp-admin
+    namespace: headlamp-system
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -13,10 +41,7 @@ metadata:
 spec:
   replicas: 1
   strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxUnavailable: 1  # Allow one pod to go down first
-      maxSurge: 0        # Don't try to create extra pods before others die
+    type: Recreate
   selector:
     matchLabels:
       app: headlamp
@@ -25,6 +50,10 @@ spec:
       labels:
         app: headlamp
     spec:
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+        fsGroup: 0
       serviceAccountName: headlamp-admin
       containers:
         - name: headlamp
@@ -36,3 +65,11 @@ spec:
           ports:
             - containerPort: 4466
               name: http
+          volumeMounts:
+            - name: token
+              mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+              readOnly: true
+      volumes:
+        - name: token
+          secret:
+            secretName: headlamp-admin-token
