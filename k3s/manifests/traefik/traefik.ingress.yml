@@ -172,8 +172,8 @@ spec:
         - name: tinyauth-forward
           namespace: default
       services:
-        - name: plex
-          port: 32400
+        - name: jellyfin
+          port: 8096
           namespace: default
   tls:
     certResolver: default

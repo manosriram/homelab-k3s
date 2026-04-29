@@ -25,6 +25,9 @@ spec:
         - name: copyparty
           image: copyparty/iv:latest
           imagePullPolicy: IfNotPresent
+          args:
+            - "--rproxy"
+            - "-1"
           ports:
             - containerPort: 3923
           env:
@@ -39,10 +42,14 @@ spec:
               mountPath: /fs
             - name: youtube
               mountPath: /youtube
-            - name: fs2
-              mountPath: /fs2
             - name: data-b
               mountPath: /b
+            - name: data-a
+              mountPath: /a
+            - name: docs
+              mountPath: /docs
+            - name: backups
+              mountPath: /backups
           livenessProbe:
             httpGet:
               path: /
@@ -77,22 +84,25 @@ spec:
             type: DirectoryOrCreate
         - name: data-a
           hostPath:
-            # path: /fs/lab/data/copyparty/ftp/A
             path: /fs/backups/cold/PhotosVideos
             type: DirectoryOrCreate
         - name: youtube
           hostPath:
             path: /fs2/archives/youtube
             type: Directory
-        - name: fs2
-          hostPath:
-            path: /fs2
-            type: Directory
         - name: data-b
           hostPath:
-            path: /fs/media/else
+            path: /fs2/b
             type: DirectoryOrCreate
         - name: fs
           hostPath:
             path: /fs
+            type: DirectoryOrCreate
+        - name: docs
+          hostPath:
+            path: /fs/backups/syncthing/common/docs
+            type: DirectoryOrCreate
+        - name: backups
+          hostPath:
+            path: /fs/backups
             type: DirectoryOrCreate
