@@ -55,21 +55,57 @@ spec:
         runAsGroup: 0
         fsGroup: 0
       serviceAccountName: headlamp-admin
+      initContainers:
+        - name: generate-kubeconfig
+          image: busybox
+          command:
+            - sh
+            - -c
+            - |
+              TOKEN=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
+              CA=$(base64 -w 0 /var/run/secrets/kubernetes.io/serviceaccount/ca.crt)
+              cat > /kubeconfig/config <<EOF
+              apiVersion: v1
+              kind: Config
+              clusters:
+              - name: local
+                cluster:
+                  server: https://kubernetes.default.svc:443
+                  certificate-authority-data: ${CA}
+              users:
+              - name: headlamp-admin
+                user:
+                  token: ${TOKEN}
+              contexts:
+              - name: local
+                context:
+                  cluster: local
+                  user: headlamp-admin
+              current-context: local
+              EOF
+          volumeMounts:
+            - name: token
+              mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+              readOnly: true
+            - name: kubeconfig
+              mountPath: /kubeconfig
       containers:
         - name: headlamp
           image: ghcr.io/headlamp-k8s/headlamp:latest
           imagePullPolicy: IfNotPresent
           args:
-            - "-in-cluster"
+            - "-kubeconfig=/kubeconfig/config"
             - "-plugins-dir=/headlamp/plugins"
           ports:
             - containerPort: 4466
               name: http
           volumeMounts:
-            - name: token
-              mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+            - name: kubeconfig
+              mountPath: /kubeconfig
               readOnly: true
       volumes:
         - name: token
           secret:
             secretName: headlamp-admin-token
+        - name: kubeconfig
+          emptyDir: {}

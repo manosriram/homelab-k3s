@@ -301,26 +301,6 @@ spec:
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
-  name: rss.manosriram.com
-spec:
-  entryPoints:
-    - websecure
-  routes:
-    - match: Host(`rss.manosriram.com`)
-      kind: Rule
-      middlewares:
-        - name: tinyauth-forward
-          namespace: default
-      services:
-        - name: yarr-external-svc # Pointing to our manual service
-          port: 7070              # Matching the service port above
-          namespace: default
-  tls:
-    certResolver: default
----
-apiVersion: traefik.io/v1alpha1
-kind: IngressRoute
-metadata:
   name: cron.manosriram.com
 spec:
   entryPoints:
