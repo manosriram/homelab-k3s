@@ -45,6 +45,8 @@ spec:
               mountPath: /config
             - name: movies
               mountPath: /movies
+            - name: downloads
+              mountPath: /downloads
             - name: tv
               mountPath: /tv
           livenessProbe:
@@ -64,6 +66,9 @@ spec:
           hostPath:
             path: /root/.var/app/org.qbittorrent.qBittorrent/data
             type: DirectoryOrCreate
+        - name: downloads
+          hostPath:
+            path: /fs/media/movies
         - name: movies
           hostPath:
             path: /fs/media/movies
